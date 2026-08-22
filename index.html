@@ -8,17 +8,23 @@
 <body style="font-family:sans-serif; padding:40px; text-align:center;">
   <h1>まかない 起動テスト</h1>
 
-<a href="makanai://import?name=test"
-     style="
-       display:inline-block;
-       padding:16px 28px;
-       background:#222;
-       color:white;
-       text-decoration:none;
-       border-radius:12px;
-       font-size:18px;
-     ">
-    まかないで開く
-  </a>
+<button onclick="openMakanai()"
+        style="
+          padding:16px 28px;
+          background:#222;
+          color:white;
+          border:none;
+          border-radius:12px;
+          font-size:18px;
+        ">
+  まかないで開く
+</button>
+
+<script>
+function openMakanai() {
+  const testData = "a".repeat(500);
+  window.location.href = "makanai://import?name=" + testData;
+}
+</script>
 </body>
 </html>
