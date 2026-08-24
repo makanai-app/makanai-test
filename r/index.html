@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>まかない レシピ受け取り</title>
+</head>
+
+<body style="
+  font-family: sans-serif;
+  padding: 40px 24px;
+  text-align: center;
+">
+
+  <h1>まかない</h1>
+  <p>共有されたレシピを受け取ります。</p>
+
+  <button
+    onclick="openMakanai()"
+    style="
+      margin-top: 20px;
+      padding: 16px 28px;
+      background: #294f38;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 18px;
+    "
+  >
+    まかないで開く
+  </button>
+
+  <p id="message" style="margin-top:24px; color:#666;"></p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    function openMakanai() {
+      if (!id) {
+        document.getElementById("message").textContent =
+          "レシピIDが見つかりません。";
+        return;
+      }
+
+      window.location.href =
+        "makanai://import?id=" + encodeURIComponent(id);
+    }
+
+    if (!id) {
+      document.getElementById("message").textContent =
+        "レシピIDが見つかりません。";
+    }
+  </script>
+
+</body>
+</html>
