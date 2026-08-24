@@ -4,33 +4,146 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>まかない レシピ受け取り</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        "Hiragino Sans",
+        "Yu Gothic",
+        sans-serif;
+
+      background: #ffffff;
+      color: #111111;
+      text-align: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 70px 28px 48px;
+    }
+
+    .orta {
+      display: block;
+      width: min(72vw, 280px);
+      height: auto;
+      margin: 0 auto 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 56px;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+
+    .message {
+      margin: 28px 0 0;
+      font-size: 20px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .open-button {
+      width: 100%;
+      margin-top: 34px;
+      padding: 22px 20px;
+
+      appearance: none;
+      border: none;
+      border-radius: 24px;
+
+      background: #245f3f;
+      color: #ffffff;
+
+      font-size: 22px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .helper {
+      margin-top: 20px;
+      color: #8a8a8a;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .appstore-note {
+      margin-top: 18px;
+      color: #777777;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .appstore-note span {
+      color: #245f3f;
+      font-weight: 600;
+    }
+
+    @media (max-width: 360px) {
+      .page {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      h1 {
+        font-size: 48px;
+      }
+
+      .message {
+        font-size: 18px;
+      }
+    }
+  </style>
 </head>
 
-<body style="
-  font-family: sans-serif;
-  padding: 40px 24px;
-  text-align: center;
-">
+<body>
 
-  <h1>まかない</h1>
-  <p>共有されたレシピを受け取ります。</p>
+  <main class="page">
 
-  <button
-    onclick="openMakanai()"
-    style="
-      margin-top: 20px;
-      padding: 16px 28px;
-      background: #294f38;
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 18px;
-    "
-  >
-    まかないで開く
-  </button>
+    <img
+      src="orta.png"
+      alt="おる太"
+      class="orta"
+    >
 
-  <p id="message" style="margin-top:24px; color:#666;"></p>
+    <h1>まかない</h1>
+
+    <p class="message">
+      共有されたレシピを受け取ります。
+    </p>
+
+    <button
+      class="open-button"
+      onclick="openMakanai()"
+    >
+      まかないで開く
+    </button>
+
+    <p class="helper">
+      タップするとアプリが起動します
+    </p>
+
+    <p class="appstore-note">
+      まかないアプリをお持ちでない方は
+      <span>こちら</span>
+    </p>
+
+  </main>
 
   <script>
     const params = new URLSearchParams(window.location.search);
@@ -38,18 +151,12 @@
 
     function openMakanai() {
       if (!id) {
-        document.getElementById("message").textContent =
-          "レシピIDが見つかりません。";
+        alert("レシピIDが見つかりません。");
         return;
       }
 
       window.location.href =
         "makanai://import?id=" + encodeURIComponent(id);
-    }
-
-    if (!id) {
-      document.getElementById("message").textContent =
-        "レシピIDが見つかりません。";
     }
   </script>
 
