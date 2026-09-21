@@ -3,28 +3,204 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>まかない 起動テスト</title>
+  <title>まかない｜レシピメモアプリ</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        "Hiragino Sans",
+        "Yu Gothic",
+        sans-serif;
+      color: #111;
+      background: #fff;
+    }
+
+    main {
+      width: min(92%, 680px);
+      margin: 0 auto;
+      padding: 56px 0 72px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 24px 0 48px;
+    }
+
+    .hero img {
+      width: 180px;
+      max-width: 48vw;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 48px;
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+    }
+
+    .lead {
+      margin: 24px auto 0;
+      max-width: 520px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #333;
+    }
+
+    section {
+      padding: 32px 0;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    h2 {
+      margin: 0 0 20px;
+      font-size: 22px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.4em;
+      line-height: 2;
+      color: #333;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 28px auto 0;
+      padding: 18px 24px;
+      border-radius: 18px;
+      background: #2f6846;
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .link-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .text-link {
+      color: #c96b2c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 24px;
+      padding-top: 28px;
+      border-top: 1px solid #e8e8e8;
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding-top: 28px;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
-<body style="font-family:sans-serif; padding:40px; text-align:center;">
-  <h1>まかない 起動テスト</h1>
 
-<button onclick="openMakanai()"
-        style="
-          padding:16px 28px;
-          background:#222;
-          color:white;
-          border:none;
-          border-radius:12px;
-          font-size:18px;
-        ">
-  まかないで開く
-</button>
+<body>
+  <main>
 
-<script>
-function openMakanai() {
-  const testData = "b".repeat(1300);
-  window.location.href = "makanai://import?name=" + testData;
-}
-</script>
+    <div class="hero">
+      <img src="oruta.png" alt="まかない">
+      <h1>まかない</h1>
+
+      <p class="lead">
+        自分のレシピを登録して使う、レシピメモアプリ。<br>
+        人数に合わせた分量変更、材料検索、写真保存、レシピ共有に対応しています。
+      </p>
+    </div>
+
+    <section>
+      <h2>まかないについて</h2>
+      <p>
+        「まかない」は、レシピを探すためではなく、
+        自分で作った料理を残して、繰り返し使うためのレシピメモアプリです。
+      </p>
+    </section>
+
+    <section>
+      <h2>できること</h2>
+      <ul>
+        <li>レシピの登録・編集・削除</li>
+        <li>人数変更に合わせた材料分量の自動計算</li>
+        <li>料理名・材料からの検索</li>
+        <li>写真と調理工程の保存</li>
+        <li>レシピの共有</li>
+        <li>iCloudバックアップ・復元</li>
+        <li>テーマの着せ替え</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>サポート</h2>
+      <p>
+        アプリに関する不具合、ご意見、ご質問はこちらからお問い合わせください。
+      </p>
+
+      <div class="link-list">
+        <a class="text-link" href="mailto:YOUR_EMAIL@example.com">
+          お問い合わせ
+        </a>
+
+        <a class="text-link" href="./privacy.html">
+          プライバシーポリシー
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <h2>App Store</h2>
+      <p>
+        「まかない」は近日App Storeで公開予定です。
+      </p>
+
+      <!-- 公開後にApp Store URLへ変更 -->
+      <!--
+      <a class="button" href="https://apps.apple.com/...">
+        App Storeで見る
+      </a>
+      -->
+    </section>
+
+    <footer>
+      © 2026 KEIJIRO KITA
+    </footer>
+
+  </main>
 </body>
 </html>
