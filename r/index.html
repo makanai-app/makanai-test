@@ -6,144 +6,67 @@
   <title>まかない レシピ受け取り</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Helvetica Neue",
-        "Hiragino Sans",
-        "Yu Gothic",
-        sans-serif;
-
-      background: #ffffff;
-      color: #111111;
-      text-align: center;
-    }
-
-    .page {
-      width: 100%;
-      max-width: 430px;
-      margin: 0 auto;
-      padding: 70px 28px 48px;
-    }
-
-    .orta {
-      display: block;
-      width: min(72vw, 280px);
-      height: auto;
-      margin: 0 auto 34px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 56px;
-      line-height: 1.05;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-    }
-
-    .message {
-      margin: 28px 0 0;
-      font-size: 20px;
-      line-height: 1.6;
-      font-weight: 500;
-    }
-
-.open-button {
-  display: inline-block;
-  width: auto;
-  min-width: 260px;
-  margin-top: 34px;
-  padding: 18px 32px;
-
-  appearance: none;
-  border: none;
-  border-radius: 22px;
-
-  background: #245f3f;
-  color: #ffffff;
-
-  font-size: 20px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.12);
-}
-    .helper {
-      margin-top: 20px;
-      color: #8a8a8a;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .appstore-note {
-      margin-top: 18px;
-      color: #777777;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-.appstore-note span {
-  color: #d96a1d;
-  font-weight: 700;
-}
-
-    @media (max-width: 360px) {
-      .page {
-        padding-left: 22px;
-        padding-right: 22px;
-      }
-
-      h1 {
-        font-size: 48px;
-      }
-
-      .message {
-        font-size: 18px;
-      }
-    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: #f5f8f2; color: #252b26;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans", "Yu Gothic", sans-serif; }
+    .page { max-width: 720px; margin: auto; padding: 24px 24px 56px; }
+    .brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 28px; }
+    .orta { width: 64px; height: auto; }
+    .brand-name { font-size: 27px; font-weight: 800; letter-spacing: .04em; }
+    .brand-note { margin: 4px 0 0; color: #687367; font-size: 12px; }
+    .photo { margin: 0 0 28px; }
+    .photo img { display: block; width: 100%; height: auto; border-radius: 12px; }
+    h1 { margin: 0; font-size: clamp(28px, 6vw, 38px); line-height: 1.45; overflow-wrap: anywhere; }
+    .servings { color: #245f3f; font-weight: 700; margin: 16px 0 0; }
+    .author, .categories { color: #667064; font-size: 14px; margin: 10px 0 0; overflow-wrap: anywhere; }
+    .recipe-section { margin-top: 32px; padding-top: 24px; border-top: 1px solid #dce5d8; }
+    h2 { margin: 0 0 18px; font-size: 20px; }
+    h2::before { content: ""; display: inline-block; width: 4px; height: 18px; margin-right: 10px; background: #d96a1d; vertical-align: -2px; }
+    .ingredients { padding: 0; margin: 0; list-style: none; }
+    .ingredients li { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid #e4eadf; line-height: 1.7; }
+    .ingredients span { overflow-wrap: anywhere; min-width: 0; }
+    .quantity { text-align: right; }
+    .memo { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.95; margin: 0; }
+    .expiry { color: #667064; margin: 30px 0 0; font-size: 13px; line-height: 1.8; }
+    .status { padding: 28px 0; line-height: 1.9; text-align: center; overflow-wrap: anywhere; }
+    .actions { margin-top: 36px; border-top: 1px solid #dce5d8; padding-top: 28px; text-align: center; }
+    .open-button, .store-button { display: block; width: 100%; max-width: 420px; margin: 0 auto; padding: 18px 20px; border-radius: 18px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .open-button { border: 0; background: #245f3f; color: white; font-size: 19px; }
+    .open-button:disabled { opacity: .5; cursor: default; }
+    .store-button { margin-top: 20px; border: 1px solid #b9cbb6; color: #245f3f; background: transparent; }
+    .helper { font-size: 13px; color: #687367; margin: 12px 0 0; line-height: 1.7; }
+    :focus-visible { outline: 3px solid #d96a1d; outline-offset: 4px; }
+    @media (max-width: 360px) { .page { padding-inline: 18px; } }
   </style>
 </head>
 
 <body>
 
   <main class="page">
+    <header class="brand">
+      <img src="oruta.png" alt="おる太" class="orta" width="206" height="206">
+      <div><div class="brand-name">まかない</div><p class="brand-note">いつものレシピを、おすそわけ。</p></div>
+    </header>
 
-    <img
-      src="oruta.png"
-      alt="おる太"
-      class="orta"
-    >
+    <p id="recipe-status" class="status" role="status" aria-live="polite">共有レシピを読み込んでいます…</p>
+    <noscript><p class="status">レシピの閲覧にはJavaScriptを有効にしてください。</p></noscript>
+    <article id="recipe" hidden aria-labelledby="recipe-name">
+      <figure id="recipe-photo" class="photo" hidden><img id="recipe-image" alt="" referrerpolicy="no-referrer"></figure>
+      <h1 id="recipe-name"></h1>
+      <p id="recipe-servings" class="servings"></p>
+      <p id="recipe-author" class="author" hidden></p>
+      <p id="recipe-categories" class="categories" hidden></p>
+      <section class="recipe-section"><h2>材料</h2><ul id="recipe-ingredients" class="ingredients"></ul></section>
+      <section class="recipe-section"><h2>作り方／工程メモ</h2><p id="recipe-memo" class="memo"></p></section>
+      <p id="recipe-expiry" class="expiry" hidden></p>
+    </article>
 
-    <h1>まかない</h1>
-
-    <p class="message">
-      共有されたレシピを受け取ります。
-    </p>
-
-    <button
-      class="open-button"
-      onclick="openMakanai()"
-    >
-      まかないで開く
-    </button>
-
-    <p class="helper">
-      タップするとアプリが起動します
-    </p>
-
-    <p class="appstore-note">
-      まかないアプリをお持ちでない方は
-      <span>こちら</span>
-    </p>
-
+    <footer class="actions">
+      <button id="open-button" class="open-button" onclick="openMakanai()">まかないで開く</button>
+      <p class="helper">タップするとアプリが起動します</p>
+      <a class="store-button" href="https://apps.apple.com/app/id6805462852">App Storeで入手</a>
+    </footer>
   </main>
 
   <script>
@@ -161,5 +84,8 @@
     }
   </script>
 
+  <script src="./cloudkit-config.js" defer></script>
+  <script src="https://cdn.apple-cloudkit.com/ck/2/CloudKit.js" defer></script>
+  <script src="./recipe.js" defer></script>
 </body>
 </html>
