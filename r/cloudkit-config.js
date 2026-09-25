@@ -5,6 +5,6 @@
 // Allowed Origin: https://makanai-app.github.io
 window.MAKANAI_CLOUDKIT_CONFIG = Object.freeze({
   containerIdentifier: "iCloud.com.kitakaze78.makanaiapp",
-  environment: "production",
+  environment: "development",
   apiToken: "c0fb4d6615f92f8a587d04360ccf5e64bf862b54fa2ad908cf04b4bb71960afd"
 });
