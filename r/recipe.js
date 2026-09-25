@@ -119,8 +119,51 @@
     checkExpiry();
   }
 
-  function isMissing(error) {
-    return error?.ckErrorCode === "NOT_FOUND" || error?.serverErrorCode === "NOT_FOUND";
+  // 任意の文字列をログへ流さない。コードも既知の値だけを許可する。
+  const diagnosticCodes = new Set([
+    "NOT_FOUND", "UNKNOWN_ITEM", "AUTHENTICATION_REQUIRED", "AUTHENTICATION_FAILED",
+    "AUTHENTICATION_ERROR", "NOT_AUTHENTICATED", "PERMISSION_FAILURE", "ACCESS_DENIED",
+    "NETWORK_ERROR", "NETWORK_FAILURE", "NETWORK_UNAVAILABLE", "CORS_ERROR",
+    "SERVICE_UNAVAILABLE", "REQUEST_TIMEOUT", "BAD_REQUEST", "INVALID_ARGUMENTS",
+    "CONFIGURATION_ERROR", "INTERNAL_ERROR", "QUOTA_EXCEEDED", "LIMIT_EXCEEDED",
+    "THROTTLED", "TRY_AGAIN_LATER", "ZONE_NOT_FOUND", "SDK_UNAVAILABLE"
+  ]);
+  const authenticationCodes = new Set([
+    "AUTHENTICATION_REQUIRED", "AUTHENTICATION_FAILED", "AUTHENTICATION_ERROR", "NOT_AUTHENTICATED"
+  ]);
+  const permissionCodes = new Set(["PERMISSION_FAILURE", "ACCESS_DENIED"]);
+
+  function safeDiagnostic(error) {
+    const safeCode = (value) => typeof value === "string" && diagnosticCodes.has(value) ? value : "UNKNOWN";
+    const ckErrorCode = safeCode(error?.ckErrorCode);
+    const serverErrorCode = safeCode(error?.serverErrorCode);
+    // reasonにはURL・Token・Authorization等が混入し得るため、原文は出力しない。
+    // 判別できる原因だけ固定文へ変換し、それ以外は省略する。
+    const rawReason = typeof error?.reason === "string" ? error.reason.slice(0, 4096) : "";
+    let reason = "詳細は安全のため省略しました";
+    if (/origin|cors/i.test(rawReason)) reason = "OriginまたはCORSに関するエラー";
+    else if (/api.?token|authenticat|authorization|not authorized/i.test(rawReason)) reason = "認証またはAPI Token設定に関するエラー";
+    else if (/permission|access.denied/i.test(rawReason)) reason = "アクセス権限に関するエラー";
+    else if (/not.found|does not exist|unknown.item/i.test(rawReason)) reason = "対象が見つかりません";
+    else if (/network|timed?.?out|connection/i.test(rawReason)) reason = "ネットワークに関するエラー";
+    else if (ckErrorCode === "SDK_UNAVAILABLE") reason = "CloudKit SDKを読み込めませんでした";
+    return { ckErrorCode, serverErrorCode, reason };
+  }
+
+  function reportErrors(errors) {
+    const diagnostics = errors.map(safeDiagnostic);
+    diagnostics.forEach((diagnostic) => console.error(diagnostic));
+    const codes = diagnostics.flatMap(({ ckErrorCode, serverErrorCode }) => [ckErrorCode, serverErrorCode]);
+    if (codes.some((code) => authenticationCodes.has(code))) {
+      showStatus("CloudKitの認証設定を確認してください。");
+    } else if (codes.some((code) => permissionCodes.has(code))) {
+      showStatus("CloudKitの読み取り権限を確認してください。");
+    } else if (diagnostics.every(({ ckErrorCode, serverErrorCode }) =>
+      [ckErrorCode, serverErrorCode].some((code) => code === "NOT_FOUND" || code === "UNKNOWN_ITEM"))) {
+      showStatus("共有レシピが見つかりません。削除されたか、URLが正しくない可能性があります。");
+    } else {
+      showStatus("CloudKitとの通信に失敗しました。時間をおいて再読み込みするか、まかないアプリで開いてください。");
+    }
   }
 
   async function load() {
@@ -136,7 +179,10 @@
     }
     let record;
     try {
-      if (!window.CloudKit) throw new Error("CloudKit JS unavailable");
+      if (!window.CloudKit) {
+        reportErrors([{ ckErrorCode: "SDK_UNAVAILABLE" }]);
+        return;
+      }
       CloudKit.configure({ containers: [{
         containerIdentifier: config.containerIdentifier,
         environment: config.environment,
@@ -145,12 +191,9 @@
       // 公開DBの匿名読み取り。サインインUI・一覧検索・変更・削除は行わない。
       const response = await CloudKit.getDefaultContainer().publicCloudDatabase.fetchRecords([recordName]);
       if (response.hasErrors) {
-        const errors = response.errors || [];
-        if (errors.length && errors.every(isMissing)) {
-          showStatus("共有レシピが見つかりません。削除されたか、URLが正しくない可能性があります。");
-          return;
-        }
-        throw new Error("CloudKit request failed");
+        const errors = Array.isArray(response.errors) && response.errors.length ? response.errors : [null];
+        reportErrors(errors);
+        return;
       }
       record = response.records?.find((item) => item.recordName === recordName);
       if (!record || record.recordType !== "Recipe") {
@@ -158,9 +201,7 @@
         return;
       }
     } catch (error) {
-      showStatus(isMissing(error)
-        ? "共有レシピが見つかりません。削除されたか、URLが正しくない可能性があります。"
-        : "CloudKitとの通信に失敗しました。時間をおいて再読み込みするか、まかないアプリで開いてください。");
+      reportErrors([error]);
       return;
     }
     try {
