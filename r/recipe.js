@@ -164,6 +164,13 @@
     } else {
       showStatus("CloudKitとの通信に失敗しました。時間をおいて再読み込みするか、まかないアプリで開いてください。");
     }
+    // 一時診断表示：安全化したコードのみ。reasonや元のエラーは表示しない。
+    const visibleCodes = [...new Set(codes.filter((code) => code !== "UNKNOWN"))];
+    const diagnostic = document.createElement("small");
+    diagnostic.style.display = "block";
+    diagnostic.style.marginTop = "8px";
+    diagnostic.textContent = `診断コード: ${visibleCodes.length ? visibleCodes.join(" / ") : "UNKNOWN"}`;
+    status.append(diagnostic);
   }
 
   async function load() {
