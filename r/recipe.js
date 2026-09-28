@@ -65,13 +65,20 @@
   }
 
   function quantity(ingredient) {
-    const amount = ingredient.amount == null ? "" : String(ingredient.amount);
-    const maximum = ingredient.maxAmount == null ? "" : String(ingredient.maxAmount);
-    const range = maximum && maximum !== amount ? `${amount ? `${amount}〜` : ""}${maximum}` : amount;
+    const displayAmount = (value) => {
+      const text = value == null ? "" : String(value).trim();
+      return text === "" || Number(text) === 0 ? "" : text;
+    };
+    const amount = displayAmount(ingredient.amount);
+    const memo = ingredient.memo ? `（${ingredient.memo}）` : "";
+    // 分量なしの場合は単位・上限値も省略し、メモだけを残す。
+    if (!amount) return memo;
+    const maximum = displayAmount(ingredient.maxAmount);
+    const range = maximum && maximum !== amount ? `${amount}〜${maximum}` : amount;
     const unit = ingredient.unit || "";
     // 日本語の計量スプーン表記は「大さじ1」「小さじ1/2」。個・g等は後置。
     const value = /^(大さじ|小さじ)$/.test(unit) ? unit + range : range + unit;
-    return value + (ingredient.memo ? `（${ingredient.memo}）` : "");
+    return value + memo;
   }
 
   function render(recipe, image) {
@@ -90,6 +97,7 @@
       name.textContent = ingredient.name;
       amount.textContent = quantity(ingredient);
       amount.className = "quantity";
+      amount.hidden = !amount.textContent;
       row.append(name, amount);
       list.append(row);
     });
